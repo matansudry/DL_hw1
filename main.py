@@ -89,19 +89,43 @@ if __name__ == "__main__":
                                               batch_size=batch_size, 
                                               shuffle=False)
     num_epochs = 10
-    loss = nn.CrossEntropyLoss()
     NN = Neural_Network()
+    train_list = []
+    test_list = []
     for epoch in range(num_epochs):
-        total_loss = 0
-        n_sampels = 0
-        n_correct = 0
+        total_loss_train = 0
+        n_sampels_train = 0
+        n_correct_train = 0
         for i,(x, y) in enumerate(train_loader):
             x = x.view(-1,28*28)
             x = x.float()
             NN.train(x, y)
             out = NN.forward(x)
-            total_loss += cross(out, y).item()
-            n_sampels += len(y)
-            n_correct += score_function(out , y)
-        print("Epoch=", epoch+1, "| Loss=", "{:.4f}".format(total_loss/n_sampels), "| ACC=", "{:.2f}".format(n_correct/n_sampels*100),"%")
+            total_loss_train += cross(out, y).item()
+            n_sampels_train += len(y)
+            n_correct_train += score_function(out , y)
+        ACC_train = n_correct_train/n_sampels_train*100
+        train_list.append(ACC_train)
+        total_loss_test = 0
+        n_sampels_test = 0
+        n_correct_test = 0
+        for i,(x, y) in enumerate(test_loader):
+            x = x.view(-1,28*28)
+            x = x.float()
+            y = y.view(-1,1)
+            out = NN.forward(x)
+            total_loss_test += cross(out, y).item()
+            n_sampels_test += len(y)
+            n_correct_test += score_function(out , y)
+        ACC_test = n_correct_test/n_sampels_test*100
+        print("Epoch=", epoch+1, "| Loss=", "{:.4f}".format(total_loss_train/n_sampels_train), "| Train ACC=", "{:.2f}".format(ACC_train),"%",  "| Test ACC=", "{:.2f}".format(ACC_test),"%")
+        test_list.append(ACC_test)
     torch.save(NN, "model.pkl")
+    num_Epochs = list(range(1,num_epochs+1))
+    plt.figure(figsize=(12,8))
+    plt.plot(num_Epochs, train_list, label="Train", linewidth=3)
+    plt.plot(num_Epochs, test_list, label="Test", linewidth=3)
+
+    plt.legend(fontsize=16)
+    plt.xlabel('Epoch', fontsize=18)
+    plt.ylabel('ACC', fontsize=16)

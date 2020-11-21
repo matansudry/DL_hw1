@@ -14,7 +14,7 @@ def evaluate_hw1():
                            transform=transform,
                           )
     test_loader = torch.utils.data.DataLoader(dataset=test_dataset, 
-                                          batch_size=batch_size, 
+                                          batch_size=len(test_dataset), 
                                           shuffle=False)
     NN = torch.load("model.pkl")
     total_loss = 0
