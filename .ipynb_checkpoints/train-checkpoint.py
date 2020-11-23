@@ -69,6 +69,7 @@ def cross(out, y):
     loss = torch.sum(log_like)
     return (loss)
 
+
 if __name__ == "__main__":
     batch_size = 256
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -120,12 +121,12 @@ if __name__ == "__main__":
         ACC_test = n_correct_test/n_sampels_test*100
         print("Epoch=", epoch+1, "| Loss=", "{:.4f}".format(total_loss_train/n_sampels_train), "| Train ACC=", "{:.2f}".format(ACC_train),"%",  "| Test ACC=", "{:.2f}".format(ACC_test),"%")
         test_list.append(ACC_test)
-    torch.save(NN, "model.pkl")
-    num_Epochs = list(range(1,num_epochs+1))
+    torch.save(NN, 'path_to_w.pkl')
     plt.figure(figsize=(12,8))
+    num_Epochs = list(range(1,num_epochs+1))
     plt.plot(num_Epochs, train_list, label="Train", linewidth=3)
     plt.plot(num_Epochs, test_list, label="Test", linewidth=3)
-
     plt.legend(fontsize=16)
     plt.xlabel('Epoch', fontsize=18)
     plt.ylabel('ACC', fontsize=16)
+

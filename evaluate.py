@@ -6,8 +6,7 @@ import torchvision.transforms as transforms
 # import math
 # import numpy as np
 
-def evaluate_hw1():
-    batch_size = 256
+def evaluate_hw1(batch_size):
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
     test_dataset = dsets.MNIST(root='./data', 
                            train=False, 
@@ -16,7 +15,7 @@ def evaluate_hw1():
     test_loader = torch.utils.data.DataLoader(dataset=test_dataset, 
                                           batch_size=len(test_dataset), 
                                           shuffle=False)
-    NN = torch.load("model.pkl")
+    NN = torch.load("path_to_w.pkl")
     total_loss = 0
     n_sampels = 0
     n_correct = 0
@@ -95,4 +94,5 @@ def cross(out, y):
         
         
 if __name__ == "__main__":
-    evaluate_hw1()
+    batch_size = 256
+    evaluate_hw1(batch_size)
